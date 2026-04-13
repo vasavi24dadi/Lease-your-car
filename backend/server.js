@@ -78,6 +78,12 @@ app.use("/api/bookings", bookingRoutes);
 app.use("/api/chat", chatRoutes);
 app.use("/api/ratings", ratingRoutes);
 app.use("/api", testRoutes);
+// Serve frontend
+const path = require('path');
+app.use(express.static(path.join(__dirname, '../frontend/build')));
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../frontend/build/index.html'));
+});
 
 // server
 const PORT = process.env.PORT || 5000;
