@@ -14,7 +14,10 @@ const io = new Server(server, {
   }
 });
 
-app.use(cors());
+app.use(cors({
+  origin: process.env.FRONTEND_URL || "http://localhost:3000",
+  credentials: true
+}));
 // middleware
 app.use(express.json());
 app.use("/uploads", express.static("uploads"));
