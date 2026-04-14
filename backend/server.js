@@ -20,14 +20,27 @@ app.use(cors({
 }));
 
 app.use(express.json());
+app.use("/uploads", express.static("uploads"));
+
+// Add routes back one at a time
+const userRoutes = require("./routes/userRoutes");
+const carRoutes = require("./routes/carRoutes");
+const bookingRoutes = require("./routes/bookingRoutes");
+const chatRoutes = require("./routes/chatRoutes");
+const ratingRoutes = require("./routes/ratingRoutes");
+const testRoutes = require("./routes/testRoutes");
 
 app.get("/", (req, res) => {
   res.json({ message: "Server is running!" });
 });
 
-app.get("/api/test", (req, res) => {
-  res.json({ message: "API works!" });
-});
+// Don't use them yet - just require them
+// app.use("/api/users", userRoutes);
+// app.use("/api/cars", carRoutes);
+// app.use("/api/bookings", bookingRoutes);
+// app.use("/api/chat", chatRoutes);
+// app.use("/api/ratings", ratingRoutes);
+// app.use("/api", testRoutes);
 
 const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => {
