@@ -3,6 +3,7 @@ const express = require("express");
 const cors = require("cors");
 const http = require("http");
 const { Server } = require("socket.io");
+const path = require("path");
 
 const app = express();
 const server = http.createServer(app);
@@ -34,13 +35,21 @@ app.get("/", (req, res) => {
   res.json({ message: "Server is running!" });
 });
 
-// USE routes now
+// Routes
 app.use("/api/users", userRoutes);
 app.use("/api/cars", carRoutes);
 app.use("/api/bookings", bookingRoutes);
 app.use("/api/chat", chatRoutes);
 app.use("/api/ratings", ratingRoutes);
 app.use("/api", testRoutes);
+
+// Serve frontend
+app.use(express.static(path.join(__dirname, "../frontend/build")));
+
+// Fallback for React Router
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "../frontend/build/index.html"));
+});
 
 const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => {
