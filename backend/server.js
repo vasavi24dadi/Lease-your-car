@@ -23,24 +23,24 @@ app.use(cors({
 app.use(express.json());
 app.use("/uploads", express.static("uploads"));
 
-// Routes
-const userRoutes = require("./routes/userRoutes");
-const carRoutes = require("./routes/carRoutes");
-const bookingRoutes = require("./routes/bookingRoutes");
-const chatRoutes = require("./routes/chatRoutes");
-const ratingRoutes = require("./routes/ratingRoutes");
-const testRoutes = require("./routes/testRoutes");
+// Routes - COMMENTED OUT FOR NOW
+// const userRoutes = require("./routes/userRoutes");
+// const carRoutes = require("./routes/carRoutes");
+// const bookingRoutes = require("./routes/bookingRoutes");
+// const chatRoutes = require("./routes/chatRoutes");
+// const ratingRoutes = require("./routes/ratingRoutes");
+// const testRoutes = require("./routes/testRoutes");
 
 app.get("/", (req, res) => {
   res.send("Lease Your Car backend is running!");
 });
 
-app.use("/api/users", userRoutes);
-app.use("/api/cars", carRoutes);
-app.use("/api/bookings", bookingRoutes);
-app.use("/api/chat", chatRoutes);
-app.use("/api/ratings", ratingRoutes);
-app.use("/api", testRoutes);
+// app.use("/api/users", userRoutes);
+// app.use("/api/cars", carRoutes);
+// app.use("/api/bookings", bookingRoutes);
+// app.use("/api/chat", chatRoutes);
+// app.use("/api/ratings", ratingRoutes);
+// app.use("/api", testRoutes);
 
 // Serve frontend
 app.use(express.static(path.join(__dirname, "../frontend/build")));
