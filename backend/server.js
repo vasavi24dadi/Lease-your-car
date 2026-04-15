@@ -3,6 +3,7 @@ const express = require("express");
 const cors = require("cors");
 const http = require("http");
 const { Server } = require("socket.io");
+const path = require("path");
 
 const app = express();
 const server = http.createServer(app);
@@ -41,6 +42,21 @@ app.use("/api/bookings", bookingRoutes);
 app.use("/api/chat", chatRoutes);
 app.use("/api/ratings", ratingRoutes);
 app.use("/api", testRoutes);
+
+// Serve frontend - safe with error handling
+try {
+  const buildPath = path.join(__dirname, "../frontend/build");
+  app.use(express.static(buildPath));
+  app.get("*", (req, res) => {
+    if (!req.path.startsWith("/api")) {
+      res.sendFile(path.join(buildPath, "index.html"), (err) => {
+        if (err) res.status(404).json({ error: "Frontend not found" });
+      });
+    }
+  });
+} catch (err) {
+  console.error("Frontend serving error:", err);
+}
 
 const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => {
