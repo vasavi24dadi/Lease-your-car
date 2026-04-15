@@ -4,6 +4,7 @@ const cors = require("cors");
 const http = require("http");
 const { Server } = require("socket.io");
 const path = require("path");
+const fs = require("fs");
 
 const app = express();
 const server = http.createServer(app);
@@ -43,13 +44,16 @@ app.use("/api/chat", chatRoutes);
 app.use("/api/ratings", ratingRoutes);
 app.use("/api", testRoutes);
 
-// Serve frontend
-app.use(express.static(path.join(__dirname, "../frontend/build")));
-
-// Fallback for React Router
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "../frontend/build/index.html"));
-});
+// Serve frontend - only if build directory exists
+const buildPath = path.join(__dirname, "../frontend/build");
+if (fs.existsSync(buildPath)) {
+  app.use(express.static(buildPath));
+  app.get("*", (req, res) => {
+    res.sendFile(path.join(buildPath, "index.html"));
+  });
+} else {
+  console.warn("Frontend build directory not found at:", buildPath);
+}
 
 const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => {
