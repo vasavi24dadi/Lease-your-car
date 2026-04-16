@@ -23,7 +23,7 @@ app.use(cors({
 app.use(express.json());
 app.use("/uploads", express.static("uploads"));
 
-// Routes
+// Routes - DON'T require database yet
 const userRoutes = require("./routes/userRoutes");
 const carRoutes = require("./routes/carRoutes");
 const bookingRoutes = require("./routes/bookingRoutes");
@@ -43,20 +43,16 @@ app.use("/api/chat", chatRoutes);
 app.use("/api/ratings", ratingRoutes);
 app.use("/api", testRoutes);
 
-// Serve frontend - safe with error handling
-try {
-  const buildPath = path.join(__dirname, "../frontend/build");
-  app.use(express.static(buildPath));
-  app.get("*", (req, res) => {
-    if (!req.path.startsWith("/api")) {
-      res.sendFile(path.join(buildPath, "index.html"), (err) => {
-        if (err) res.status(404).json({ error: "Frontend not found" });
-      });
-    }
+// Serve frontend
+const buildPath = path.join(__dirname, "../frontend/build");
+app.use(express.static(buildPath));
+
+// Fallback route - fixed syntax
+app.get(/^(?!\/api\/).*$/, (req, res) => {
+  res.sendFile(path.join(buildPath, "index.html"), (err) => {
+    if (err) res.status(500).send(err);
   });
-} catch (err) {
-  console.error("Frontend serving error:", err);
-}
+});
 
 const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => {
