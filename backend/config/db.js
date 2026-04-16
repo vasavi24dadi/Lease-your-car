@@ -1,5 +1,6 @@
 const { Pool } = require("pg");
 
+// Create pool but don't connect immediately
 const pool = new Pool({
   user: process.env.DB_USER || "postgres",
   host: process.env.DB_HOST || "localhost",
@@ -8,8 +9,5 @@ const pool = new Pool({
   port: process.env.DB_PORT || 5432,
 });
 
-pool.connect()
-  .then(() => console.log("PostgreSQL connected successfully"))
-  .catch(err => console.error("DB connection error", err));
-
+// Don't try to connect on startup - just export the pool
 module.exports = pool;
