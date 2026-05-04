@@ -27,7 +27,7 @@ function Register() {
 
     setLoading(true);
     try {
-      const res = await API.post("/users/register", {
+      const res = await API.post("/auth/register", {
         name,
         email,
         phone,
