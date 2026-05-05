@@ -1,15 +1,26 @@
 const multer = require("multer");
 const path = require("path");
+const cloudinary = require("cloudinary").v2;
+const { CloudinaryStorage } = require("multer-storage-cloudinary");
 
-// Set storage location and filename
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "uploads/");
+// Configure Cloudinary using environment variables
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
+
+// Set storage location to Cloudinary
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: "lease_your_car",
+    allowed_formats: ["jpg", "jpeg", "png", "gif"],
+    public_id: (req, file) => {
+      const name = path.parse(file.originalname).name.replace(/[^a-zA-Z0-9]/g, "_");
+      return `car-${name}-${Date.now()}`;
+    },
   },
-  filename: (req, file, cb) => {
-    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-    cb(null, file.fieldname + "-" + uniqueSuffix + path.extname(file.originalname));
-  }
 });
 
 // Filter to allow only image files

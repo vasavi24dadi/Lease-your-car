@@ -20,7 +20,7 @@ const addCar = async (req, res) => {
       return res.status(400).json({ error: "Car image is required" });
     }
 
-    const image = req.file.filename;
+    const image = req.file.path;
 
     const newCar = await pool.query(
       `INSERT INTO cars (owner_id, car_name, location, price_per_km, car_image)
