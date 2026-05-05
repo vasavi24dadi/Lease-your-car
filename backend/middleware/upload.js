@@ -15,7 +15,7 @@ const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: {
     folder: "lease_your_car",
-    allowed_formats: ["jpg", "jpeg", "png", "gif"],
+    allowed_formats: ["jpg", "jpeg", "png", "gif", "webp", "avif"],
     public_id: (req, file) => {
       const name = path.parse(file.originalname).name.replace(/[^a-zA-Z0-9]/g, "_");
       return `car-${name}-${Date.now()}`;
@@ -25,7 +25,7 @@ const storage = new CloudinaryStorage({
 
 // Filter to allow only image files
 const fileFilter = (req, file, cb) => {
-  const allowedTypes = /jpeg|jpg|png|gif/;
+  const allowedTypes = /jpeg|jpg|png|gif|webp|avif/;
   const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
   const mimetype = allowedTypes.test(file.mimetype);
 
